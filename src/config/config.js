@@ -1,4 +1,5 @@
 import winston from 'winston';
+import 'dotenv/config.js';
 
 const config = {
   NODE_ENV: {
@@ -6,6 +7,10 @@ const config = {
   },
   LOG_CONFIGURATION: {
     transports: [new winston.transports.Console()],
+  },
+  FIREBASE: {
+    projectId: process.env.FIREBASEPROJECTID,
+    storageBucket: process.env.FIREBASESTORAGEBUCKET,
   },
 };
 
