@@ -2,10 +2,13 @@
   "name": "petsfinderapi",
   "version": "1.0.0",
   "description": "PetsFinder API RESTful",
-  "main": "server.js",
+  "main": "src/server.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "local": "nodemon src/nodemon.js"
+    "local": "nodemon src/nodemon.js",
+    "lint:check": "eslint .",
+    "lint:fix": "eslint --fix ."
   },
   "repository": {
     "type": "git",
@@ -24,9 +27,15 @@
   "homepage": "https://github.com/facuhrodriguez/PetsFinderAPI#readme",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "winston": "^3.7.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.16"
+    "eslint": "^8.12.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.6.2"
   }
 }
