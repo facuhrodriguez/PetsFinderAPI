@@ -1,15 +1,15 @@
 import PetsLostsService from '../services/petsLosts.service.js';
 
 export default class PetsLostsController {
-  static #petsService;
+  #petsService;
 
   constructor() {
-    PetsLostsController.#petsService = new PetsLostsService();
+    this.#petsService = new PetsLostsService();
   }
 
-  static async findAll(req, res, next) {
+  async findAll(req, res, next) {
     try {
-      const pets = await PetsLostsController.#petsService.findAll();
+      const pets = await this.#petsService.findAll();
       res.result = pets;
       return next();
     } catch (error) {

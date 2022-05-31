@@ -4,16 +4,16 @@ import PetsLostsController from '../controllers/petsLosts.controller.js';
 export default class PetsRoutes {
   #router;
 
-  #petLostsController;
+  #petsLostController;
 
   constructor() {
     this.#router = Router();
-    this.#petLostsController = new PetsLostsController();
     this.#initializeRoutes();
+    this.#petsLostController = new PetsLostsController();
   }
 
   #initializeRoutes() {
-    this.#router.get('/losts', PetsLostsController.findAll);
+    this.#router.get('/losts', (req, res, next) => this.#petsLostController.findAll(req, res, next));
   }
 
   getRouter() {
