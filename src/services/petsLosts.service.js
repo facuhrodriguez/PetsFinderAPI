@@ -1,6 +1,6 @@
 import { logger } from '../config/config.js';
 import DatabaseService from '../config/database/db.js';
-import FormatQueryService from './formatQuery.service.js';
+import PetsLostsFormatQuery from './formatQuery/petsLostsFormatQuery.js';
 
 export default class PetsLostsService {
   #db;
@@ -16,7 +16,7 @@ export default class PetsLostsService {
     try {
       const petsLosts = await this.#petsLostRef.get();
       if (!petsLosts.empty) {
-        return FormatQueryService.formatQuery(petsLosts.docs);
+        return PetsLostsFormatQuery.formatQuery(petsLosts.docs);
       }
       return [];
     } catch (error) {
