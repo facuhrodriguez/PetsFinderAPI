@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
-import { initializeApp } from 'firebase-admin/app';
+import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
-import { logger } from '../config.js';
+import { config, logger } from '../config.js';
 
 export default class DatabaseService {
   /**
@@ -10,8 +10,11 @@ export default class DatabaseService {
    */
   static initializeDatabase() {
     try {
+      const serviceAccount = config.FIREBASE.google_creds;
       logger.info('Initializating database...');
-      initializeApp();
+      initializeApp({
+        credential: cert(serviceAccount),
+      });
       logger.info('Database connected');
       return getFirestore();
     } catch (error) {
