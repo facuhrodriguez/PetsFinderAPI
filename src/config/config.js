@@ -11,6 +11,7 @@ const config = {
   FIREBASE: {
     projectId: process.env.FIREBASEPROJECTID,
     storageBucket: process.env.FIREBASESTORAGEBUCKET,
+    google_creds: process.env.GOOGLE_CREDS ? JSON.parse(process.env.GOOGLE_CREDS) : {},
   },
 };
 

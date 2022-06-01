@@ -1,5 +1,5 @@
 import { logger } from '../config/config.js';
-import DatabaseService from '../database/db.js';
+import DatabaseService from '../config/database/db.js';
 import FormatQueryService from './formatQuery.service.js';
 
 export default class PetsLostsService {
