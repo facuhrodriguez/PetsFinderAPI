@@ -10,9 +10,19 @@ export default class IndexRoutes {
 
   #authRouter;
 
-  constructor() {
+  /**
+   * @type {import('multer').Multer} fileMiddleware
+   */
+  #fileMiddleware;
+
+  /**
+   * Create new instance of Index Routes
+   * @param {import('multer').Multer} fileMiddleware
+   */
+  constructor(fileMiddleware) {
     this.#router = Router();
-    this.#petsRouter = new PetsRoutes().getRouter();
+    this.#fileMiddleware = fileMiddleware;
+    this.#petsRouter = new PetsRoutes(this.#fileMiddleware).getRouter();
     this.#authRouter = new AuthRoutes().getRouter();
     this.#initializeRoutes();
     this.#router.use(resultHandler);

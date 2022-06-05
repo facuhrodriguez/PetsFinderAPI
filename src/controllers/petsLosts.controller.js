@@ -7,10 +7,53 @@ export default class PetsLostsController {
     this.#petsService = new PetsLostsService();
   }
 
+  /**
+   * Find all lost pets
+   * @param {Express.Request} req
+   * @param {Express.Response} res
+   * @param {import("express").NextFunction} next
+   * @returns
+   */
   async findAll(req, res, next) {
     try {
       const pets = await this.#petsService.findAll();
       res.result = pets;
+      return next();
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  /**
+   * Publish a new lost pet
+   * @param {import("express").Request} req
+   * @param {import("express").Response} res
+   * @param {import("express").NextFunction} next
+   * @returns
+   */
+  publishPet(req, res, next) {
+    try {
+      const { files: photos } = req;
+      const {
+        name, age, animal, description, castrated, extras, lastView,
+      } = req.body;
+      /**
+       * @type {import('../view-models/pets.vm').Pets}
+       */
+      const petToPublish = {
+        name,
+        age: Number(age),
+        animal,
+        description,
+        castrated: castrated.toUpperCase() === 'TRUE',
+        extras,
+        lastView: new Date(lastView),
+        createdAt: new Date(),
+        // coordenates,
+      };
+      this.#petsService.publishPet(petToPublish, photos);
+
+      res.result = 'Success';
       return next();
     } catch (error) {
       return next(error);
