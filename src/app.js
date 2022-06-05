@@ -1,12 +1,28 @@
 import express from 'express';
 import cors from 'cors';
+import multer from 'multer';
+import fs from 'fs';
+import path from 'path';
+import os from 'os';
+import compression from 'compression';
+import helmet from 'helmet';
+
 import DatabaseService from './config/database/db.js';
 import IndexRoutes from './routes/index.routes.js';
 import errorHandler from './middlewares/errorsHandler.middleware.js';
 import StorageService from './config/storage/storageService.js';
+import allowMimeType from './helpers/files.helper.js';
+import { logger } from './config/config.js';
 
 export default class App {
   #indexRouter;
+
+  #tmpDir;
+
+  /**
+   * @type {multer.Multer}
+   */
+  #upload;
 
   #app;
 
@@ -14,9 +30,12 @@ export default class App {
     this.#app = express();
     this.#app.use(express.json());
     this.#app.use(cors());
+    this.#app.use(compression());
+    this.#app.use(helmet());
     App.#initializeDatabase();
     App.#initializeStorage();
-    this.#indexRouter = new IndexRoutes().getRouter();
+    this.#initializeMulter();
+    this.#indexRouter = new IndexRoutes(this.#upload).getRouter();
     this.#initializeRoutes();
     this.#app.use(errorHandler);
   }
@@ -46,8 +65,40 @@ export default class App {
     DatabaseService.initializeDatabase();
   }
 
+  /**
+   * Initialize storage
+   */
   static #initializeStorage() {
-    const storageService = new StorageService();
-    storageService.initializeStorage();
+    StorageService.initializeStorage();
+  }
+
+  /**
+   * Initialize multer middleware
+   */
+  #initializeMulter() {
+    try {
+      this.#tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mascotapp-'));
+      this.#upload = multer({ dest: this.#tmpDir, fileFilter: App.#validateFilesFormat });
+    } catch (error) {
+      logger.error(`Error initializing multer - ${JSON.stringify(error)}`);
+      throw error;
+    }
+  }
+
+  /**
+   * Validat files format from the request
+   * @param {Express.Request} req
+   * @param {*} file
+   * @param {*} cb
+   */
+  static #validateFilesFormat(req, file, cb) {
+    try {
+      if (file.mimetype && allowMimeType(file.mimetype)) {
+        return cb(null, true);
+      }
+      return cb(null, false);
+    } catch (error) {
+      return cb(error);
+    }
   }
 }
