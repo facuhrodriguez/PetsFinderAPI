@@ -22,6 +22,7 @@ export default class PetsLostsFormatQuery extends FormatQueryService {
         valueToReturn.age = valueData.age;
         valueToReturn.castrated = valueData.castrated;
         valueToReturn.description = valueData.description;
+        valueToReturn.type = valueData.animal;
         valueToReturn.photos = valueData.photos ? valueData.photos : [];
 
         if (valueData.createdAt) {

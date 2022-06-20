@@ -16,7 +16,8 @@ export default class PetsLostsController {
    */
   async findAll(req, res, next) {
     try {
-      const pets = await this.#petsService.findAll();
+      const { type } = req.query;
+      const pets = await this.#petsService.findAll(!type ? 'all' : type);
       res.result = pets;
       return next();
     } catch (error) {
@@ -35,7 +36,7 @@ export default class PetsLostsController {
     try {
       const { files: photos } = req;
       const {
-        name, age, animal, description, castrated, extras, lastView,
+        name, age, type: animal, description, castrated, extras, lastView,
       } = req.body;
       /**
        * @type {import('../view-models/pets.vm').Pets}
