@@ -19,11 +19,18 @@ export default class PetsLostsService {
 
   /**
    * Find all pets losts
+   * @param {'all' | 'perro' | 'gato' | 'otro'} type type of pet to search
    * @returns {Promise<import('../view-models/pets.vm.js').Pets[]>} pets losts
    */
-  async findAll() {
+  async findAll(type) {
     try {
-      const petsLosts = await this.#petsLostRef.get();
+      let petsLosts;
+      if (type === 'all') {
+        petsLosts = await this.#petsLostRef.get();
+      } else {
+        petsLosts = await this.#petsLostRef.where('animal', '==', type).get();
+      }
+
       if (!petsLosts.empty) {
         return PetsLostsFormatQuery.formatQuery(petsLosts.docs);
       }

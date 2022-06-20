@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import PetsLostsController from '../controllers/petsLosts.controller.js';
+import { publishPetLostValidator, petsLostFindAllValidator } from '../validators/pets.validator.js';
+import validator from '../validators/result.validator.js';
 
 export default class PetsRoutes {
   #router;
@@ -23,12 +25,14 @@ export default class PetsRoutes {
    * Initialize all routes for pets module
    */
   #initializeRoutes() {
-    this.#router.get('/losts', (req, res, next) => {
+    this.#router.get('/losts', petsLostFindAllValidator(), validator, (req, res, next) => {
       this.#petsLostController.findAll(req, res, next);
     });
     this.#router.post(
       '/losts',
       this.#fileMiddleware.array('photos', 5),
+      publishPetLostValidator(),
+      validator,
       (req, res, next) => {
         this.#petsLostController.publishPet(req, res, next);
       },
