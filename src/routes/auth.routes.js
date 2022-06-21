@@ -21,6 +21,12 @@ export default class AuthRoutes {
       validator,
       (req, res, next) => this.#authController.login(req, res, next),
     );
+    this.#router.get('/facebook', (req, res, next) => {
+      this.#authController.loginFacebook(req, res, next);
+    });
+    this.#router.get('/facebook/oauthURL', (req, res, next) => {
+      AuthController.getFacebookOauthUrl(req, res, next);
+    });
   }
 
   getRouter() {

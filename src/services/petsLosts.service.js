@@ -37,7 +37,7 @@ export default class PetsLostsService {
       return [];
     } catch (error) {
       logger.error(`Error getting all pets - ${JSON.stringify(error)}`);
-      throw error;
+      throw new Error('Internal error server');
     }
   }
 
@@ -59,7 +59,7 @@ export default class PetsLostsService {
       await this.#petsLostRef.doc(newPet.id).update({ photos: photosToAdd });
     } catch (error) {
       logger.error(`Error publishing new pet - ${JSON.stringify(error)}`);
-      throw error;
+      throw new Error('Internal error server');
     }
   }
 
@@ -76,7 +76,7 @@ export default class PetsLostsService {
       return `gs://${config.FIREBASE.storageBucket}/${file.name}`;
     } catch (error) {
       logger.error(`Error uploading photos - ${JSON.stringify(error)}`);
-      throw error;
+      throw new Error('Internal error server');
     }
   }
 }
