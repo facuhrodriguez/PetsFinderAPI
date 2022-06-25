@@ -1,12 +1,23 @@
-import winston from 'winston';
+import { transports, format, createLogger } from 'winston';
 import 'dotenv/config.js';
+
+const logLevels = {
+  fatal: 0,
+  error: 1,
+  warn: 2,
+  info: 3,
+  debug: 4,
+  trace: 5,
+};
 
 const config = {
   NODE_ENV: {
     PORT: process.env.PORT || 3000,
   },
   LOG_CONFIGURATION: {
-    transports: [new winston.transports.Console()],
+    transports: [new transports.Console()],
+    format: format.combine(format.timestamp(), format.json()),
+    levels: logLevels,
   },
   FIREBASE: {
     projectId: process.env.FIREBASEPROJECTID,
@@ -22,8 +33,18 @@ const config = {
     redirect_uri: process.env.FACEBOOKREDIRECT,
     scopes: ['email', 'public_profile'],
   },
+  EMAIL: {
+    host: process.env.EMAILHOST ? process.env.EMAILHOST : 'smtp.gmail.com',
+    port: process.env.EMAILPORT ? +process.env.EMAILPORT : 465,
+    secure: true,
+    from: process.env.EMAILFROM ? process.env.EMAILFROM : 'mascotapp@gmail.com',
+    auth: {
+      user: process.env.EMAILUSER,
+      pass: process.env.EMAILPASS,
+    },
+  },
 };
 
-const logger = winston.createLogger(config.LOG_CONFIGURATION);
+const logger = createLogger(config.LOG_CONFIGURATION);
 
 export { config, logger };
