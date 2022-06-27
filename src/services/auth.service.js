@@ -30,10 +30,10 @@ export default class AuthService {
           name,
           email,
         });
+        this.#emailService.sendEmail(email, 'Cuenta creada exitosamente', 'email', { name });
       } else {
         await this.#usersRef.doc(email).update({ name });
       }
-      this.#emailService.sendEmail(email, 'Cuenta creada exitosamente', 'email', { name });
     } catch (error) {
       logger.error(`Error logging - ${JSON.stringify(error)}`);
       throw error;
@@ -61,6 +61,7 @@ export default class AuthService {
           await this.#usersRef
             .doc(email)
             .update({ facebookInfo });
+          this.#emailService.sendEmail(email, 'Cuenta creada exitosamente', 'email', { name });
         } else {
           await this.#usersRef.doc(email).set({
             name,
@@ -68,7 +69,6 @@ export default class AuthService {
             facebookInfo,
           });
         }
-        this.#emailService.sendEmail(email, 'Cuenta creada exitosamente', 'email', { name });
       }
     } catch (error) {
       logger.error(
