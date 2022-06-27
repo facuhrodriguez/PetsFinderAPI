@@ -3,7 +3,6 @@ import * as queryString from 'query-string';
 import { config, logger } from '../config/config.js';
 import DatabaseService from '../config/database/db.js';
 import EmailSenderService from './emailSender.service.js';
-import emailTemplate from '../templates/emailTemplate.js';
 
 export default class AuthService {
   #db;
@@ -34,7 +33,7 @@ export default class AuthService {
       } else {
         await this.#usersRef.doc(email).update({ name });
       }
-      this.#emailService.sendEmail(email, 'Cuenta creada exitosamente', `Bienvenido ${name}`, emailTemplate.content);
+      this.#emailService.sendEmail(email, 'Cuenta creada exitosamente', 'email', { name });
     } catch (error) {
       logger.error(`Error logging - ${JSON.stringify(error)}`);
       throw error;
@@ -69,6 +68,7 @@ export default class AuthService {
             facebookInfo,
           });
         }
+        this.#emailService.sendEmail(email, 'Cuenta creada exitosamente', 'email', { name });
       }
     } catch (error) {
       logger.error(
