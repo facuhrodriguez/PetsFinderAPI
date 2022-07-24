@@ -26,7 +26,7 @@ const publishPetLostValidator = () => [
     return castrated;
   }),
   body('extras').notEmpty().isString(),
-  body('lastView').notEmpty().isDate(),
+  body('lastView').notEmpty(),
 ];
 
 export { petsLostFindAllValidator, publishPetLostValidator };
